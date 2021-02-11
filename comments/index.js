@@ -24,21 +24,21 @@ app.post('/posts/:id/comments', async (req, res) => {
 
   commentsByPostId[req.params.id] = comments;
 
-  await axios.post('http://localhost:4005/events', {
+  await axios.post('http://event-bus-srv:4005/events', {
     type: 'CommentCreated',
     data: {
       id: commentId,
       content,
       postId: req.params.id,
-      status: 'pending'
-    }
+      status: 'pending',
+    },
   });
 
   res.status(201).send(comments);
 });
 
 app.post('/events', async (req, res) => {
-  console.log('Event Received:', req.body.type);
+  console.log('Received Event', req.body.type);
 
   const { type, data } = req.body;
 
@@ -46,7 +46,7 @@ app.post('/events', async (req, res) => {
     const { postId, id, status, content } = data;
     const comments = commentsByPostId[postId];
 
-    const comment = comments.find(comment => {
+    const comment = comments.find((comment) => {
       return comment.id === id;
     });
     comment.status = status;
@@ -57,8 +57,8 @@ app.post('/events', async (req, res) => {
         id,
         status,
         postId,
-        content
-      }
+        content,
+      },
     });
   }
 
