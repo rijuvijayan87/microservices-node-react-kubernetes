@@ -14,4 +14,5 @@ spec:
     spec:
       containers:
       - name: posts
-        image: rijuvijayan/post-service
+        image: rijuvijayan/posts-service:latest
+        imagePullPolicy: Never
